@@ -1,0 +1,69 @@
+﻿@model BoostrapHelpers.ViewModels.ClienteViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>ClienteViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+               
+        @Html.BootstrapTextBoxFor(x=>x.Nome)
+        @Html.BootstrapTextBoxFor(x=>x.Telefone)
+        @Html.BootstrapFileFor(x=>x.Foto)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+        var loadImage = function (evt) {
+            var files = evt.target.files;
+
+            for (var i = 0, f; f = files[i]; i++) {
+
+                if (!f.type.match('image.*')) {
+                    alert("Selecione uma imagem!");
+                    $('#Foto' + '@BootstrapHelper.FILE_SUFIX').val('');
+                    $('#Foto').val('');
+                    continue;
+                }
+
+                var reader = new FileReader();
+
+                reader.onload = (function (theFile) {
+                    return function (e) {
+                        $("#Foto").prop("value", e.target.result);
+                    };
+                })(f);
+
+                reader.readAsDataURL(f);
+            }
+        };
+
+        $('#Foto' + '@BootstrapHelper.FILE_SUFIX').change(loadImage);
+
+</script>
+
+
+}
